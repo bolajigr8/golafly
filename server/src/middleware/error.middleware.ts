@@ -9,12 +9,8 @@ export function errorHandler(
   err: unknown,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,
 ): void {
-  // -------------------------------------------------------------------------
-  // Operational errors (ApiError)
-  // -------------------------------------------------------------------------
   if (err instanceof ApiError) {
     if (env.NODE_ENV !== 'test') {
       if (err.statusCode >= 500) {
@@ -31,9 +27,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // Malformed JSON body
-  // -------------------------------------------------------------------------
   if (
     err instanceof SyntaxError &&
     'status' in err &&
@@ -46,9 +39,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // Mongoose validation error
-  // -------------------------------------------------------------------------
   if (err instanceof MongooseError.ValidationError) {
     const errors = Object.values(err.errors).map((e) => ({
       field: e.path,
@@ -61,9 +51,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // Mongoose duplicate key (unique constraint)
-  // -------------------------------------------------------------------------
   if (
     typeof err === 'object' &&
     err !== null &&
@@ -77,9 +64,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // Mongoose cast error (invalid ObjectId)
-  // -------------------------------------------------------------------------
   if (err instanceof MongooseError.CastError) {
     if (env.NODE_ENV !== 'test') {
       console.warn(`[${req.method}] ${req.url} — 400: Cast error`)
@@ -88,9 +72,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // JWT errors
-  // -------------------------------------------------------------------------
   if (err instanceof TokenExpiredError) {
     if (env.NODE_ENV !== 'test') {
       console.warn(`[${req.method}] ${req.url} — 401: Token expired`)
@@ -107,9 +88,6 @@ export function errorHandler(
     return
   }
 
-  // -------------------------------------------------------------------------
-  // Unknown / unhandled error
-  // -------------------------------------------------------------------------
   const message =
     err instanceof Error ? err.message : 'An unexpected error occurred.'
   const stack =

@@ -1,25 +1,5 @@
-/**
- * schemas/auth.schema.ts
- *
- * Zod schemas that describe and validate the request bodies for all
- * authentication routes. Inferred TypeScript types are exported alongside
- * each schema so they can be used throughout the service and controller layers
- * without duplicating type definitions.
- */
-
 import { z } from 'zod'
 
-// ── Register Schema ───────────────────────────────────────────────────────────
-
-/**
- * Validates the request body for POST /api/auth/register.
- *
- * Password rules:
- *   • Minimum 8 characters
- *   • At least one uppercase letter (A-Z)
- *   • At least one digit (0-9)
- *   • At least one special character
- */
 export const registerSchema = z.object({
   fullName: z
     .string()
@@ -46,16 +26,8 @@ export const registerSchema = z.object({
     ),
 })
 
-/** TypeScript type inferred from registerSchema */
 export type RegisterInput = z.infer<typeof registerSchema>
 
-// ── Login Schema ──────────────────────────────────────────────────────────────
-
-/**
- * Validates the request body for POST /api/auth/login.
- * Password is intentionally kept as a non-empty string with no complexity
- * rules — the complexity was enforced on registration.
- */
 export const loginSchema = z.object({
   email: z
     .string()
@@ -69,5 +41,4 @@ export const loginSchema = z.object({
     .min(1, 'Password must not be empty.'),
 })
 
-/** TypeScript type inferred from loginSchema */
 export type LoginInput = z.infer<typeof loginSchema>

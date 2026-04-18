@@ -1,22 +1,11 @@
-/**
- * config/database.ts
- *
- * Manages the MongoDB connection via Mongoose.
- * Implements an exponential back-off retry strategy — retries up to MAX_RETRIES
- * times with RETRY_DELAY_MS milliseconds between each attempt before giving up
- * and crashing the process. Also registers disconnect/error event listeners so
- * unexpected drops are logged clearly in production.
- */
 import dns from 'node:dns/promises'
 dns.setServers(['1.1.1.1', '1.0.0.1', '8.8.8.8', '8.8.4.4'])
 
 import mongoose from 'mongoose'
 import { env } from './env.js'
 
-/** Maximum number of connection attempts before the process exits */
 const MAX_RETRIES = 5
 
-/** Milliseconds to wait between connection attempts */
 const RETRY_DELAY_MS = 5_000
 
 /**
@@ -28,13 +17,10 @@ export const connectDB = async (attempt = 1): Promise<void> => {
     console.log(`  Connecting to MongoDB… (attempt ${attempt}/${MAX_RETRIES})`)
 
     await mongoose.connect(env.MONGODB_URI, {
-      // Mongoose 7+ uses these defaults, but being explicit is good practice
       serverSelectionTimeoutMS: 5_000,
     })
 
     console.log('  MongoDB connected successfully.')
-
-    // ── Event listeners ──────────────────────────────────────────────────────
 
     mongoose.connection.on('disconnected', () => {
       console.warn('   MongoDB disconnected. Attempting to reconnect…')

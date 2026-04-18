@@ -1,20 +1,3 @@
-/**
- * types/data.types.ts
- *
- * Canonical TypeScript interfaces for the three core data entities: Ticket,
- * Flight, and Hotel, plus the shared pagination envelope types.
- *
- * These interfaces are the contract between the data layer and every consumer
- * (services, controllers, and eventually the frontend via a shared package).
- * Changes here must be reflected in the frontend types and in any future
- * Mongoose models created when replacing the mock data layer.
- *
- * Design note: string-literal union types (e.g. `status`) are preferred over
- * plain `string` so that TypeScript enforces valid values at compile time.
- */
-
-// ── Ticket ────────────────────────────────────────────────────────────────────
-
 export interface Ticket {
   id: string
   homeTeam: string
@@ -22,9 +5,7 @@ export interface Ticket {
   stadium: string
   city: string
   country: string
-  /** ISO 8601 datetime string, e.g. "2026-04-20T15:00:00.000Z" */
   date: string
-  /** Local kick-off time display string, e.g. "15:00" */
   kickoffTime: string
   competition: string
   category: 'Standard' | 'Premium' | 'VIP'
@@ -38,8 +19,6 @@ export interface Ticket {
   status: 'available' | 'selling_fast' | 'sold_out'
   featured: boolean
 }
-
-// ── Flight ────────────────────────────────────────────────────────────────────
 
 export interface FlightCity {
   city: string
@@ -73,8 +52,6 @@ export interface Flight {
   featured: boolean
 }
 
-// ── Hotel ─────────────────────────────────────────────────────────────────────
-
 export interface Hotel {
   id: string
   name: string
@@ -102,8 +79,6 @@ export interface Hotel {
   roomType: string
   featured: boolean
 }
-
-// ── Pagination ────────────────────────────────────────────────────────────────
 
 export interface PaginationMeta {
   /** Total matching items across all pages */

@@ -18,15 +18,7 @@ import dataRoutes from './routes/data.routes.js'
 export function createApp(): express.Application {
   const app = express()
 
-  // ---------------------------------------------------------------------------
-  // Trust proxy — required for Render and other reverse-proxy hosts so that
-  // rate limiters see the real client IP rather than the proxy's IP.
-  // ---------------------------------------------------------------------------
   app.set('trust proxy', 1)
-
-  // ---------------------------------------------------------------------------
-  // Security headers
-  // ---------------------------------------------------------------------------
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -40,10 +32,6 @@ export function createApp(): express.Application {
       crossOriginEmbedderPolicy: false,
     }),
   )
-
-  // ---------------------------------------------------------------------------
-  // CORS
-  // ---------------------------------------------------------------------------
   app.use(
     cors({
       origin: env.CLIENT_URL,
@@ -53,31 +41,17 @@ export function createApp(): express.Application {
     }),
   )
 
-  // ---------------------------------------------------------------------------
-  // Request ID — every response carries a unique X-Request-ID header which
-  // makes it trivial to trace a specific request through logs.
-  // ---------------------------------------------------------------------------
   app.use((req: Request, res: Response, next: NextFunction): void => {
     const requestId = uuidv4()
     res.setHeader('X-Request-ID', requestId)
     next()
   })
 
-  // ---------------------------------------------------------------------------
-  // Body parsing & cookies
-  // ---------------------------------------------------------------------------
   app.use(express.json({ limit: '10kb' }))
   app.use(express.urlencoded({ extended: true, limit: '10kb' }))
   app.use(cookieParser())
 
-  // ---------------------------------------------------------------------------
-  // Global rate limiter
-  // ---------------------------------------------------------------------------
   app.use(globalLimiter)
-
-  // ---------------------------------------------------------------------------
-  // Health check — no auth required, used by Render and load balancers
-  // ---------------------------------------------------------------------------
   app.get('/api/health', (_req: Request, res: Response): void => {
     const dbState = mongoose.connection.readyState
     const dbStatus = dbState === 1 ? 'connected' : 'disconnected'
@@ -92,15 +66,9 @@ export function createApp(): express.Application {
     })
   })
 
-  // ---------------------------------------------------------------------------
-  // Routes
-  // ---------------------------------------------------------------------------
   app.use('/api/auth', authRoutes)
   app.use('/api', dataRoutes)
 
-  // ---------------------------------------------------------------------------
-  // 404 handler — must come after all routes
-  // ---------------------------------------------------------------------------
   app.use((_req: Request, res: Response): void => {
     res.status(404).json({
       success: false,
@@ -108,10 +76,6 @@ export function createApp(): express.Application {
       errors: [],
     })
   })
-
-  // ---------------------------------------------------------------------------
-  // Global error handler — must be last
-  // ---------------------------------------------------------------------------
   app.use(errorHandler)
 
   return app

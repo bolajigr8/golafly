@@ -1,14 +1,3 @@
-/**
- * data/mock/tickets.ts
- *
- * 12 realistic match ticket fixtures spread across Premier League,
- * La Liga, Serie A, Bundesliga, Champions League, and Eredivisie.
- * All event dates are April 20, 2026 or later.
- *
- * To replace with real data: swap this array with a database query in
- * data.service.ts — controllers require zero changes.
- */
-
 import type { Ticket } from '../../types/data.types.js'
 
 export const mockTickets: Ticket[] = [

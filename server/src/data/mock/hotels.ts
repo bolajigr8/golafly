@@ -1,15 +1,3 @@
-/**
- * data/mock/hotels.ts
- *
- * 12 realistic hotel fixtures near major football stadiums across Europe.
- * Check-in dates start April 20, 2026. Prices in USD per night.
- * Spread across London, Madrid, Barcelona, Paris, Milan, Munich, Turin,
- * Manchester, Dortmund, and Amsterdam.
- *
- * To replace with real data: swap this array with a database query in
- * data.service.ts — controllers require zero changes.
- */
-
 import type { Hotel } from '../../types/data.types.js'
 
 export const mockHotels: Hotel[] = [

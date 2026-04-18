@@ -1,17 +1,3 @@
-/**
- * data/mock/flights.ts
- *
- * 12 realistic flight fixtures connecting Nigerian cities (Lagos, Abuja) and
- * major European cities to football destinations across Europe.
- * Departure dates align with or precede match dates (April 20, 2026 onward).
- *
- * Mix of long-haul Africa–Europe routes, short-haul European hops, and
- * economy / business / first class options at realistic price points.
- *
- * To replace with real data: swap this array with a database query in
- * data.service.ts — controllers require zero changes.
- */
-
 import type { Flight } from '../../types/data.types.js'
 
 export const mockFlights: Flight[] = [
