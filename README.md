@@ -57,7 +57,7 @@ CLIENT_URL=http://localhost:3000
 ```
 
 **MongoDB URI:**
-For faster reviews, my online database connection string can be used
+For faster reviews, my online database connection string can be used (Wouldnt ever try this for a production application)
 
 MONGODB_URI=mongodb+srv://micbol:Micbol2017@meetup-cluster.ee1nrx0.mongodb.net/golafly?appName=golafly
 
@@ -87,6 +87,18 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 pnpm dev
 # Running on http://localhost:3000
 ```
+
+## Live Demo
+
+|              | URL                                     |
+| ------------ | --------------------------------------- |
+| Frontend     | https://golafly-eight.vercel.app        |
+| Backend API  | https://golafly.onrender.com            |
+| Health Check | https://golafly.onrender.com/api/health |
+
+> Render's free tier spins down after inactivity — if the first request is slow, give it 20–30 seconds to wake up. Everything after that is fast.
+
+---
 
 ## Key Features
 
@@ -131,7 +143,7 @@ The Golafly colours (`#001c10` and `#e6b810`) are used as a real design system. 
 
 ## Deployment
 
-- **Backend → Render**:
-- **Frontend → Vercel**:
+- **Backend → Render**: root directory `server`
+- **Frontend → Vercel**: root directory `client`
 
-Health check endpoint: `GET /api/health` — Render uses this to confirm the service is up.
+Health check endpoint: `GET /api/health` confirms server status, database connection, uptime, and version.
