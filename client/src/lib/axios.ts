@@ -1,8 +1,14 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import type { FieldError } from '@/types/auth.types'
 
+// const apiClient = axios.create({
+//   baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000',
+//   withCredentials: true,
+//   timeout: 10_000,
+// })
+
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000',
+  baseURL: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
   withCredentials: true,
   timeout: 10_000,
 })
