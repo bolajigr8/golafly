@@ -24,7 +24,7 @@ export function Logo({
 }: LogoProps) {
   const { iconSize, text, gap } = sizeMap[size]
   const pathname = usePathname()
-  const isDashboard = pathname === '/dashboard'
+  const isDashboard = pathname.startsWith('/dashboard')
 
   return (
     <Link href={href} className={cn('flex items-center group', gap, className)}>
