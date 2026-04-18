@@ -1,4 +1,3 @@
-// app/api/[...path]/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 
 const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:5000'
@@ -6,12 +5,12 @@ const SEVEN_DAYS = 7 * 24 * 60 * 60
 
 async function handler(
   req: NextRequest,
-  { params }: { params: { path: string[] } },
+  { params }: { params: Promise<{ path: string[] }> }, // ← Promise now
 ) {
-  const path = params.path.join('/')
-  const url = `${BACKEND}/api/${path}`
+  const { path } = await params // ← must await
+  const pathStr = path.join('/')
+  const url = `${BACKEND}/api/${pathStr}`
 
-  // Forward the token cookie to Express for authenticated routes
   const token = req.cookies.get('token')?.value
 
   const headers: HeadersInit = {
@@ -30,9 +29,8 @@ async function handler(
   const data = await backendRes.json()
   const res = NextResponse.json(data, { status: backendRes.status })
 
-  // Only handle cookie on auth endpoints
   const setCookie = backendRes.headers.get('set-cookie')
-  const isAuthEndpoint = ['login', 'register'].some((e) => path.includes(e))
+  const isAuthEndpoint = ['login', 'register'].some((e) => pathStr.includes(e))
 
   if (setCookie && isAuthEndpoint) {
     const newToken = setCookie.match(/token=([^;]+)/)?.[1]
@@ -47,8 +45,7 @@ async function handler(
     }
   }
 
-  // Handle logout — clear the cookie
-  if (path.includes('logout')) {
+  if (pathStr.includes('logout')) {
     res.cookies.delete('token')
   }
 
